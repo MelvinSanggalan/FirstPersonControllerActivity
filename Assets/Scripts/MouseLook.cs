@@ -35,6 +35,12 @@ public class MouseLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //raycast button
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            Interact();
+        }
+
         //get mouse x and mouse y movement and assign to floats
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
@@ -44,7 +50,7 @@ public class MouseLook : MonoBehaviour
         rotY += mouseY * sens * Time.deltaTime;
 
         //clamp x axis
-        rotX = Mathf.Clamp(rotY, -clamp, clamp);
+        rotY = Mathf.Clamp(rotY, -clamp, clamp);
 
         //create local quaternium then update transform.rotation
         Quaternion localRot = Quaternion.Euler(-rotY, rotX, 0f);
@@ -54,4 +60,27 @@ public class MouseLook : MonoBehaviour
         transform.rotation = localRot;
         player.transform.rotation = bodyRot;
     }
+
+    private void Interact()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 10))
+        {
+            if(hit.collider.gameObject.TryGetComponent<IInteraction>(out IInteraction inter))
+            {
+                inter.Activate();
+            }
+        }
+
+
+    }
+
+   
+
+}
+
+public interface IInteraction
+{
+    public void Activate();
 }
