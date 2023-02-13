@@ -6,6 +6,7 @@ TagManager:
   tags:
   - UpperHitBox
   - LowerHitBox
+  - topbottom
   layers:
   - Default
   - TransparentFX

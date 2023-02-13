@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BallScript : MonoBehaviour
 {
-    [SerializeField] private float ballSpeed = 5;
-    [SerializeField] private float ballimpactSpeed = -10000;
+    [SerializeField] private Vector3 ballVelocity;
+    [SerializeField] private float ballSpeed;
     Rigidbody rb;
      
 
@@ -14,14 +14,15 @@ public class BallScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        rb.AddForce(ballSpeed, 0, 0);
+        rb.velocity = ballVelocity * ballSpeed;
     }
 
-    private void OnCollisionEnter(Collision objectHit)
+    private void OnCollisionEnter(Collision collison)
     {
-        if (objectHit.gameObject.tag == "UpperHitBox")
+        if (collison.gameObject.TryGetComponent<PaddleMove>(out PaddleMove pdl))
         {
-            rb.AddForce(ballimpactSpeed, 0, 0);
+            float newX = ballVelocity.x * -1;
+           rb.velocity = new Vector3(newX, 0, rb.velocity.z);
         }
     }
 
